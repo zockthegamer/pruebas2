@@ -15,7 +15,7 @@
       background: linear-gradient(135deg,var(--bg1),var(--bg2));
       flex-direction:column;
     }
-    .stage{position:relative;width:100%;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;overflow:hidden;}
+    .stage{position:relative;width:100%;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;overflow-y:auto; padding: 20px;}
     #pregunta{font-size:28px;font-weight:700;color:#7b1f2d;text-align:center;}
     .controls{display:flex;gap:20px;align-items:center;justify-content:center;position:relative;}
     .btn{padding:14px 28px;border-radius:12px;border:none;font-size:20px;font-weight:800;cursor:pointer;
@@ -30,145 +30,58 @@
     .poema{display:none;max-width:900px;text-align:center;padding:20px;border-radius:16px;
       background:rgba(255,255,255,0.6);box-shadow:0 8px 30px rgba(0,0,0,0.08);z-index:45;}
     .typewriter{font-size:20px;color:#6b0a1a;min-height:72px;}
-    .photos{display:none;gap:10px;align-items:center;justify-content:center;z-index:45;flex-wrap:wrap;margin-top:20px;}
-    .photo{width:200px;height:140px;border-radius:12px;object-fit:cover;box-shadow:0 6px 18px rgba(0,0,0,0.12);
-      cursor:pointer;transition:transform 0.3s ease;}
-    .photo:hover{transform:scale(1.08);}
+    .photos{display:none;gap:10px;align-items:center;justify-content:center;z-index:45;flex-wrap:wrap;margin-top:20px; max-width: 90%;}
+    .photo{width:100%;height:100%;border-radius:12px;object-fit:cover;} /* Ajustado para el wrapper */
     .contador{position:absolute;top:18px;left:18px;background:rgba(255,255,255,0.7);padding:8px 12px;border-radius:12px;font-weight:700;color:#8a1a2b;}
     .nombreFinal{display:none;position:fixed;bottom:24px;right:24px;padding:12px 18px;border-radius:999px;
       background:linear-gradient(90deg,#ffd6e8,#fff1f8);font-weight:900;color:#9c1642;animation:brillar 2.5s infinite;}
     @keyframes brillar{0%{filter:brightness(1)}50%{filter:brightness(1.3)}100%{filter:brightness(1)}}
     .corazon{position:absolute;font-size:20px;pointer-events:none;z-index:5;opacity:0.95;}
     canvas{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:30;}
-
-    /* Contenedor para botón + slider (área "hotspot") */
-    .audioControl{
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      z-index: 95;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 8px;
-      padding: 6px; /* aumenta zona de hover */
-      border-radius: 12px;
-      background: rgba(255,255,255,0.02);
-    }
-    .song-selector {
-        padding: 6px 10px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        background-color: white;
-        font-weight: 600;
-        cursor: pointer;
-        font-size: 14px;
-        color: #555;
-    }
-
-    .mutebtn{
-      background:rgba(255,255,255,0.85);
-      padding:8px;
-      border-radius:10px;
-      font-weight:800;
-      cursor:pointer;
-      user-select:none;
-    }
-
-    /* --- Slider oculto por defecto --- */
-    .volumeSlider{
-      width:140px;
-      opacity:0;
-      pointer-events:none;
-      transform: translateY(-6px);
-      transition: opacity 0.28s ease, transform 0.28s ease;
-      -webkit-appearance: none;
-    }
-    .volumeSlider.show{
-      opacity:1;
-      pointer-events:auto;
-      transform: translateY(0);
-    }
-
-    /* Estilo rápido para el slider */
+    .audioControl{position: absolute;top: 12px;right: 12px;z-index: 95;display: flex;flex-direction: column;align-items: flex-end;gap: 8px;padding: 6px;border-radius: 12px;background: rgba(255,255,255,0.02);}
+    .song-selector {padding: 6px 10px;border-radius: 8px;border: 1px solid #ccc;background-color: white;font-weight: 600;cursor: pointer;font-size: 14px;color: #555;}
+    .mutebtn{background:rgba(255,255,255,0.85);padding:8px;border-radius:10px;font-weight:800;cursor:pointer;user-select:none;}
+    .volumeSlider{width:140px;opacity:0;pointer-events:none;transform: translateY(-6px);transition: opacity 0.28s ease, transform 0.28s ease;-webkit-appearance: none;}
+    .volumeSlider.show{opacity:1;pointer-events:auto;transform: translateY(0);}
     .volumeSlider::-webkit-slider-runnable-track{height:6px;border-radius:6px;background:linear-gradient(90deg,#ff69b4,#ffd27d);}
     .volumeSlider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:white;box-shadow:0 1px 3px rgba(0,0,0,0.2);margin-top:-4px;}
     .volumeSlider::-moz-range-track{height:6px;border-radius:6px;background:linear-gradient(90deg,#ff69b4,#ffd27d);}
     .volumeSlider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:white;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
-
     .footerNote{position:fixed;bottom:8px;left:12px;color:#5b0b22;font-weight:700;opacity:0.85;}
-    @media (max-width:720px){.photo{width:130px;height:90px;}#pregunta{font-size:20px}.btn{font-size:16px;padding:10px 16px;}
-      .volumeSlider{width:100px;}
-    }
+    .lightbox {display: none;position: fixed;z-index: 9999;top: 0; left: 0; right: 0; bottom: 0;background: rgba(0,0,0,0.85);align-items: center;justify-content: center;}
+    .lightbox-content {max-width: 90%;max-height: 85%;border-radius: 14px;box-shadow: 0 0 20px rgba(0,0,0,0.4);}
+    .lightbox video {max-width: 90%;max-height: 85%;border-radius: 14px;}
+    .lightbox-close {position: absolute;top: 20px; right: 30px;font-size: 32px;color: white;cursor: pointer;font-weight: bold;text-shadow: 0 2px 6px rgba(0,0,0,0.5);}
+    .upload-container {display: none;margin-top: 20px;padding: 15px;background: rgba(255, 255, 255, 0.7);border-radius: 12px;z-index: 50;}
+    #status-message {font-size: 14px;margin-top: 8px;color: #7b1f2d;font-weight: 600;}
 
-    /* Modal de foto/video */
-    .lightbox {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.85);
-      align-items: center;
-      justify-content: center;
-    }
-    .lightbox-content {
-      max-width: 90%;
-      max-height: 85%;
-      border-radius: 14px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.4);
-    }
-    .lightbox video {
-      max-width: 90%;
-      max-height: 85%;
-      border-radius: 14px;
-    }
-    .lightbox-close {
-      position: absolute;
-      top: 20px; right: 30px;
-      font-size: 32px;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.5);
-    }
+    /* --- NUEVO: Estilos para el botón de subida personalizado --- */
+    #upload-form {display: flex;align-items: center;gap: 12px;}
+    #image-input {display: none;}
+    .custom-upload-btn {display: inline-flex;align-items: center;gap: 8px;padding: 10px 20px;background: var(--accent);color: white;font-weight: 700;border-radius: 10px;cursor: pointer;transition: background-color 0.3s ease;font-size: 16px;}
+    .custom-upload-btn:hover {background: #ff85c8;}
+    .plus-icon {font-size: 22px;font-weight: bold;}
+    .file-name {font-style: italic;color: #8a1a2b;font-weight: 500;}
+    .upload-btn {padding: 10px 20px;font-size: 16px;background: #27ae60; border-radius: 10px; border:none; color:white; font-weight:700; cursor:pointer;}
+    .upload-btn:hover {background: #2ecc71;}
+    .upload-btn:disabled {background: #95a5a6; cursor: not-allowed;}
     
-    /* Estilos para el formulario de subida */
-    .upload-container {
-        display: none; /* Se mostrará junto con las fotos */
-        margin-top: 20px;
-        padding: 15px;
-        background: rgba(255, 255, 255, 0.7);
-        border-radius: 12px;
-        z-index: 50;
-    }
-    #upload-form {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-    }
-    #upload-form input[type="file"] {
-        color: #6b0a1a;
-    }
-    .upload-btn {
-        padding: 8px 16px;
-        border-radius: 8px;
-        border: none;
-        background: var(--accent);
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    #status-message {
-        font-size: 14px;
-        margin-top: 8px;
-        color: #7b1f2d;
-        font-weight: 600;
+    /* --- NUEVO: Estilos para el botón de borrar en las fotos --- */
+    .photo-wrapper {position: relative;width: 200px;height: 140px;border-radius: 12px;overflow: hidden;box-shadow: 0 6px 18px rgba(0,0,0,0.12);cursor: pointer;transition: transform 0.3s ease;}
+    .photo-wrapper:hover {transform: scale(1.08);}
+    .delete-btn {position: absolute;top: 6px;right: 6px;background: rgba(255, 0, 0, 0.7);color: white;border: none;border-radius: 50%;width: 28px;height: 28px;font-size: 16px;font-weight: bold;display: flex;align-items: center;justify-content: center;cursor: pointer;opacity: 0;pointer-events: none;transition: opacity 0.2s ease, background-color 0.2s ease;z-index: 10;}
+    .photo-wrapper:hover .delete-btn {opacity: 1;pointer-events: auto;}
+    .delete-btn:hover {background: rgba(255, 0, 0, 0.9);}
+
+    @media (max-width:720px){
+        #pregunta{font-size:20px}.btn{font-size:16px;padding:10px 16px;}
+        .volumeSlider{width:100px;}
+        .photo-wrapper{width:130px;height:90px;}
     }
   </style>
 </head>
 <body>
   <div class="contador" id="contador">Días juntos: 0</div>
-
   <div id="audioControl" class="audioControl" aria-hidden="false">
     <div class="mutebtn" id="mutebtn">🔈 Música: silenciada</div>
     <select id="songSelector" class="song-selector" aria-label="Seleccionar canción">
@@ -178,7 +91,6 @@
     </select>
     <input id="volumeSlider" class="volumeSlider" type="range" min="0" max="1" step="0.01" value="1" aria-label="Volumen">
   </div>
-
   <div class="stage" id="stage">
     <div id="pregunta">¿Quieres abrir este regalo de tu novio Josue? 💝</div>
     <div class="controls">
@@ -192,14 +104,16 @@
       <div class="extra">Eres mi todo. Gracias por existir 🌹</div>
     </div>
     <div class="poema" id="poema"><div class="typewriter" id="typewriter"></div></div>
-    
     <div class="photos" id="photos"></div>
     
     <div class="upload-container" id="upload-container">
         <form id="upload-form">
-            <label for="image-input">Añadir recuerdo:</label>
             <input type="file" id="image-input" accept="image/*,video/*" required>
-            <button type="submit" class="upload-btn">Subir</button>
+            <label for="image-input" class="custom-upload-btn">
+                <span class="plus-icon">+</span> Añadir
+            </label>
+            <span id="file-name" class="file-name"></span>
+            <button type="submit" class="upload-btn" id="submit-btn" style="display: none;">Subir</button>
         </form>
         <div id="status-message"></div>
     </div>
@@ -208,9 +122,7 @@
     <div class="footerNote">Un detalle de Josue — Hecho con ♥</div>
   </div>
   <canvas id="confetti"></canvas>
-
   <audio id="bgMusic" loop></audio>
-
   <div class="lightbox" id="lightbox">
     <span class="lightbox-close" id="lightbox-close">&times;</span>
     <img id="lightbox-img" class="lightbox-content" />
@@ -220,9 +132,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
-
   <script>
-    // --- TUS CREDENCIALES DE FIREBASE ---
     const firebaseConfig = {
       apiKey: "AIzaSyCuCBarj_3H2FOe2FSEmRJ5FGynWZhjWu4",
       authDomain: "valky090725.firebaseapp.com",
@@ -232,8 +142,6 @@
       appId: "1:562892182179:web:2a4658e2ebd2ee8d90a516",
       measurementId: "G-9BKRM3K7Q9"
     };
-
-    // Inicializar Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const storage = firebase.storage();
@@ -241,40 +149,63 @@
 
   <script>
   const relationshipStart = '2025-07-09';
-  
-  const poemLines = [
-    "En tus ojos encontré mi amanecer,",
-    "en tu risa la canción que quiero aprender.",
-    "Eres mi calma y mi fuego a la vez,",
-    "Valery, por siempre te voy a querer.",
-    "Valery, te amo ♥ mi amor."
-  ];
-
+  const poemLines = ["En tus ojos encontré mi amanecer,","en tu risa la canción que quiero aprender.","Eres mi calma y mi fuego a la vez,","Valery, por siempre te voy a querer.","Valery, te amo ♥ mi amor."];
   const photosEl = document.getElementById("photos");
   const uploadContainer = document.getElementById("upload-container");
 
   async function initPhotos(){
-    photosEl.innerHTML = ''; // Limpiar galería antes de cargar
+    photosEl.innerHTML = '';
     const snapshot = await db.collection("photos").orderBy("timestamp", "asc").get();
     
     snapshot.forEach(doc => {
       const item = doc.data();
+      const docId = doc.id;
+      
+      const photoWrapper = document.createElement("div");
+      photoWrapper.className = "photo-wrapper";
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.className = "delete-btn";
+      deleteBtn.innerHTML = "🗑️";
+      deleteBtn.title = "Borrar recuerdo";
+      deleteBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (confirm("¿Estás seguro de que quieres borrar este recuerdo?")) {
+              deletePhoto(docId, item.url);
+          }
+      });
+      photoWrapper.appendChild(deleteBtn);
+
       if(item.type.startsWith("image")){
         const img=document.createElement("img");
         img.src=item.url; img.className="photo";
+        img.alt="Recuerdo con Valery";
         img.addEventListener("click",()=>openLightbox("img",item.url));
-        photosEl.appendChild(img);
+        photoWrapper.appendChild(img);
       } else if(item.type.startsWith("video")){
         const vid=document.createElement("video");
         vid.src=item.url; vid.className="photo";
         vid.autoplay=true; vid.loop=true; vid.muted=true; vid.playsInline=true;
         vid.addEventListener("click",()=>openLightbox("video",item.url));
-        photosEl.appendChild(vid);
+        photoWrapper.appendChild(vid);
       }
+      photosEl.appendChild(photoWrapper);
     });
-
     photosEl.style.display="flex";
     uploadContainer.style.display="block";
+  }
+
+  async function deletePhoto(docId, fileUrl) {
+      try {
+          await db.collection("photos").doc(docId).delete();
+          const fileRef = storage.refFromURL(fileUrl);
+          await fileRef.delete();
+          statusMessage.textContent = 'Recuerdo borrado con éxito.';
+          initPhotos();
+      } catch (error) {
+          console.error("Error al borrar el recuerdo: ", error);
+          statusMessage.textContent = 'Hubo un error al borrar el recuerdo.';
+      }
   }
 
   function updateDaysCounter(){
@@ -288,7 +219,6 @@
   const si=document.getElementById("si"), no=document.getElementById("no"), regalo=document.getElementById("regalo"),
   pregunta=document.getElementById("pregunta"), flores=document.getElementById("flores"), poema=document.getElementById("poema"),
   typewriter=document.getElementById("typewriter"), nombreFinal=document.getElementById("nombreFinal");
-
   let clicks=0, siScale=1;
   no.addEventListener("mouseover",()=>{
     no.style.left=Math.random()*500+"px";
@@ -297,7 +227,6 @@
     si.style.transform=`scale(${siScale})`;
     si.style.animation="latido 0.8s ease-in-out";
   });
-
   si.addEventListener("click",()=>{
     pregunta.style.display="none";si.style.display="none";no.style.display="none";regalo.style.display="block";
   });
@@ -312,7 +241,6 @@
       launchFloatingHearts();
     }
   });
-
   function showPoem(){
     poema.style.display="block";
     let i=0;
@@ -327,7 +255,6 @@
     }
     typeLine();
   }
-
   function launchFloatingHearts(){
     setInterval(()=>{
       const heart = document.createElement("div");
@@ -349,13 +276,11 @@
       },30);
     },600);
   }
-
   const audioControl = document.getElementById("audioControl");
   const mutebtn = document.getElementById("mutebtn");
   const bgMusic = document.getElementById("bgMusic");
   const volumeSlider = document.getElementById("volumeSlider");
   const songSelector = document.getElementById("songSelector");
-
   let hideTimer = null;
   function clearHideTimer(){ if(hideTimer) { clearTimeout(hideTimer); hideTimer = null; } }
   function scheduleHide(ms = 1500){
@@ -366,11 +291,9 @@
   }
   function showSlider(){ clearHideTimer(); volumeSlider.classList.add("show"); }
   function hideSliderImmediate(){ clearHideTimer(); volumeSlider.classList.remove("show"); }
-
   window.addEventListener('load', () => {
     bgMusic.src = songSelector.value;
   });
-
   songSelector.addEventListener("change", (event) => {
     const newSong = event.target.value;
     bgMusic.src = newSong;
@@ -380,7 +303,6 @@
     showSlider();
     scheduleHide(3000);
   });
-  
   mutebtn.addEventListener("click", () => {
     if (bgMusic.paused) {
       bgMusic.play().catch(()=>{});
@@ -393,7 +315,6 @@
       hideSliderImmediate();
     }
   });
-
   bgMusic.addEventListener("play", ()=> {
     mutebtn.textContent = "🔊 Música: reproduciendo";
   });
@@ -401,7 +322,6 @@
     mutebtn.textContent = "🔈 Música: silenciada";
     hideSliderImmediate();
   });
-
   audioControl.addEventListener("mouseenter", () => {
     if (!bgMusic.paused) {
       showSlider();
@@ -412,19 +332,15 @@
       scheduleHide(1200);
     }
   });
-
   volumeSlider.addEventListener("mouseenter", () => { clearHideTimer(); showSlider(); });
   volumeSlider.addEventListener("mouseleave", () => { if (!bgMusic.paused) scheduleHide(1200); });
-
   volumeSlider.addEventListener("input", () => {
     bgMusic.volume = parseFloat(volumeSlider.value);
-  });
-
+});
   const lightbox=document.getElementById("lightbox");
   const lightboxImg=document.getElementById("lightbox-img");
   const lightboxVideo=document.getElementById("lightbox-video");
   const closeBtn=document.getElementById("lightbox-close");
-
   function openLightbox(type,src){
     lightbox.style.display="flex";
     if(type==="img"){
@@ -438,14 +354,12 @@
       lightboxVideo.play();
     }
   }
-
   closeBtn.addEventListener("click",()=>{
     lightbox.style.display="none";
     lightboxImg.src="";
     lightboxVideo.pause();
     lightboxVideo.src="";
   });
-
   lightbox.addEventListener("click",(e)=>{
     if(e.target===lightbox){
       closeBtn.click();
@@ -455,6 +369,19 @@
   const uploadForm = document.getElementById('upload-form');
   const imageInput = document.getElementById('image-input');
   const statusMessage = document.getElementById('status-message');
+  const fileNameSpan = document.getElementById('file-name');
+  const submitBtn = document.getElementById('submit-btn');
+
+  imageInput.addEventListener('change', () => {
+    if (imageInput.files.length > 0) {
+        fileNameSpan.textContent = imageInput.files[0].name;
+        submitBtn.style.display = 'inline-block';
+        statusMessage.textContent = '';
+    } else {
+        fileNameSpan.textContent = '';
+        submitBtn.style.display = 'none';
+    }
+  });
 
   uploadForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -462,6 +389,7 @@
     if (!file) return;
 
     statusMessage.textContent = 'Subiendo, un momento por favor...';
+    submitBtn.disabled = true;
 
     try {
       const fileName = `${Date.now()}_${file.name}`;
@@ -479,13 +407,19 @@
 
       statusMessage.textContent = '¡Recuerdo añadido con éxito!';
       uploadForm.reset();
+      fileNameSpan.textContent = '';
+      submitBtn.style.display = 'none';
+      submitBtn.disabled = false;
       initPhotos();
 
     } catch (error) {
       console.error("Error al subir el archivo: ", error);
       statusMessage.textContent = 'Hubo un error al subir el archivo.';
+      submitBtn.disabled = false;
     }
   });
   </script>
 </body>
 </html>
+}
+Quiero que corrijas el código que te di, ya que lo probé y no funciono lo de la papelera, solo lo del botón, agrégale también que al costado del contador de días, aparesca un contador de cuantas fotos hay en total en la galería
