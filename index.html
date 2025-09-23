@@ -52,35 +52,11 @@
     .lightbox-content {max-width: 90%;max-height: 85%;border-radius: 14px;box-shadow: 0 0 20px rgba(0,0,0,0.4);}
     .lightbox video {max-width: 90%;max-height: 85%;border-radius: 14px;}
     .lightbox-close {position: absolute;top: 20px; right: 30px;font-size: 32px;color: white;cursor: pointer;font-weight: bold;text-shadow: 0 2px 6px rgba(0,0,0,0.5);}
-    
-    /* --- Estilos del contenedor de subida --- */
-    .upload-container {
-        display: none;
-        margin-top: 20px;
-        padding: 15px;
-        z-index: 50;
-        width: 100%;
-        max-width: 500px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    /* --- NUEVO: Zona para arrastrar y soltar --- */
-    #drop-zone {
-        width: 100%;
-        padding: 30px;
-        border: 3px dashed rgba(255, 105, 180, 0.5);
-        border-radius: 16px;
-        text-align: center;
-        transition: background-color 0.3s ease, border-color 0.3s ease;
-    }
-    #drop-zone.dragover {
-        background-color: rgba(255, 182, 193, 0.3);
-        border-color: var(--accent);
-    }
-    
-    #upload-form {display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%;}
+    .upload-container {display: none;margin-top: 20px;padding: 15px;background: rgba(255, 255, 255, 0.7);border-radius: 12px;z-index: 50;}
+    #status-message {font-size: 14px;margin-top: 8px;color: #7b1f2d;font-weight: 600;}
+
+    /* --- NUEVO: Estilos para el botón de subida personalizado --- */
+    #upload-form {display: flex;align-items: center;gap: 12px;}
     #image-input {display: none;}
     .custom-upload-btn {display: inline-flex;align-items: center;gap: 8px;padding: 10px 20px;background: var(--accent);color: white;font-weight: 700;border-radius: 10px;cursor: pointer;transition: background-color 0.3s ease;font-size: 16px;}
     .custom-upload-btn:hover {background: #ff85c8;}
@@ -89,9 +65,8 @@
     .upload-btn {padding: 10px 20px;font-size: 16px;background: #27ae60; border-radius: 10px; border:none; color:white; font-weight:700; cursor:pointer;}
     .upload-btn:hover {background: #2ecc71;}
     .upload-btn:disabled {background: #95a5a6; cursor: not-allowed;}
-    #status-message {font-size: 14px;margin-top: 8px;color: #7b1f2d;font-weight: 600;}
-
-    /* --- Estilos para el botón de borrar en las fotos --- */
+    
+    /* --- NUEVO: Estilos para el botón de borrar en las fotos --- */
     .photo-wrapper {position: relative;width: 200px;height: 140px;border-radius: 12px;overflow: hidden;box-shadow: 0 6px 18px rgba(0,0,0,0.12);cursor: pointer;transition: transform 0.3s ease;}
     .photo-wrapper:hover {transform: scale(1.08);}
     .delete-btn {position: absolute;top: 6px;right: 6px;background: rgba(255, 0, 0, 0.7);color: white;border: none;border-radius: 50%;width: 28px;height: 28px;font-size: 16px;font-weight: bold;display: flex;align-items: center;justify-content: center;cursor: pointer;opacity: 0;pointer-events: none;transition: opacity 0.2s ease, background-color 0.2s ease;z-index: 10;}
@@ -132,17 +107,15 @@
     <div class="photos" id="photos"></div>
     
     <div class="upload-container" id="upload-container">
-      <div id="drop-zone">
         <form id="upload-form">
             <input type="file" id="image-input" accept="image/*,video/*" required>
             <label for="image-input" class="custom-upload-btn">
-                <span class="plus-icon">+</span> Añadir Archivo
+                <span class="plus-icon">+</span> Añadir
             </label>
-            <span id="file-name" class="file-name">O arrastra una imagen aquí</span>
+            <span id="file-name" class="file-name"></span>
             <button type="submit" class="upload-btn" id="submit-btn" style="display: none;">Subir</button>
         </form>
-      </div>
-      <div id="status-message"></div>
+        <div id="status-message"></div>
     </div>
 
     <div class="nombreFinal" id="nombreFinal">Valery 💛</div>
@@ -398,46 +371,16 @@
   const statusMessage = document.getElementById('status-message');
   const fileNameSpan = document.getElementById('file-name');
   const submitBtn = document.getElementById('submit-btn');
-  const dropZone = document.getElementById('drop-zone'); // NUEVO
-
-  function handleFileSelect(file) {
-      if (file) {
-          imageInput.files = new DataTransfer().files; // Limpiar selección anterior
-          const dataTransfer = new DataTransfer();
-          dataTransfer.items.add(file);
-          imageInput.files = dataTransfer.files;
-          
-          fileNameSpan.textContent = file.name;
-          submitBtn.style.display = 'inline-block';
-          statusMessage.textContent = '';
-      }
-  }
 
   imageInput.addEventListener('change', () => {
     if (imageInput.files.length > 0) {
-      handleFileSelect(imageInput.files[0]);
+        fileNameSpan.textContent = imageInput.files[0].name;
+        submitBtn.style.display = 'inline-block';
+        statusMessage.textContent = '';
     } else {
-        fileNameSpan.textContent = 'O arrastra una imagen aquí';
+        fileNameSpan.textContent = '';
         submitBtn.style.display = 'none';
     }
-  });
-
-  // --- NUEVO: Eventos para Arrastrar y Soltar ---
-  dropZone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dropZone.classList.add('dragover');
-  });
-
-  dropZone.addEventListener('dragleave', (e) => {
-      e.preventDefault();
-      dropZone.classList.remove('dragover');
-  });
-
-  dropZone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropZone.classList.remove('dragover');
-      const file = e.dataTransfer.files[0];
-      handleFileSelect(file);
   });
 
   uploadForm.addEventListener('submit', async (e) => {
@@ -464,7 +407,7 @@
 
       statusMessage.textContent = '¡Recuerdo añadido con éxito!';
       uploadForm.reset();
-      fileNameSpan.textContent = 'O arrastra una imagen aquí';
+      fileNameSpan.textContent = '';
       submitBtn.style.display = 'none';
       submitBtn.disabled = false;
       initPhotos();
